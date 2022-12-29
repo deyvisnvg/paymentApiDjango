@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from pagos.models import (
     Services,
-    Users,
     Payment_user,
     Expired_payments
 )
@@ -13,19 +13,20 @@ class ServicesSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class UsersSerializer(ModelSerializer):
-    class Meta:
-        model = Users
-        fields = "__all__"
-
-
 class Payment_userSerializer(ModelSerializer):
     class Meta:
         model = Payment_user
-        fields = "__all__"
+        fields = ["id", "user_id", "service_id", "amount",
+                  "paymentDate", "expirationDate"]
+        # read_only_fields = "id",
 
 
 class Expired_paymentsSerializer(ModelSerializer):
     class Meta:
         model = Expired_payments
-        fields = "__all__"
+        fields = ["payment_user_id", "penalty_fee_amount"]
+
+# class UsersSerializer(ModelSerializer):
+#     class Meta:
+#         model = Users
+#         fields = "__all__"

@@ -1,45 +1,111 @@
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+    DjangoModelPermissionsOrAnonReadOnly,
+    DjangoModelPermissions
+)
+from rest_framework.response import Response
+from rest_framework import viewsets, filters, status
+from .pagination import StandardResultsSetPagination
+# from drf_roles.mixins import RoleViewSetMixin
+from rest_framework_roles.granting import is_self
 from pagos.models import (
     Services,
-    Users,
     Payment_user,
     Expired_payments
 )
-from rest_framework import viewsets, filters
 from .serializers import (
     ServicesSerializer,
-    UsersSerializer,
     Payment_userSerializer,
     Expired_paymentsSerializer
 )
+
+import datetime
 # from rest_framework.permissions import IsAuthenticated
 # from .pagination import StandardResultsSetPagination
 
 
 class ServicesViewSet(viewsets.ModelViewSet):
-    queryset = Services.objects.all()
+    permission_classes = [DjangoModelPermissions]
+    # queryset = Services.objects.all()
     serializer_class = ServicesSerializer
 
-    # pagination_class = StandardResultsSetPagination
-
-    # filter_backends = [filters.SearchFilter]
-
+    pagination_class = StandardResultsSetPagination
+    throttle_scope = 'pagos_2'
+    # throttle_scope = 'pagos_2_prueba'
     # permission_classes = [IsAuthenticated]
 
-    # search_fields = ['usuario__id', 'fecha_pago', 'servicio']
-    # throttle_scope = 'pagos'
+    http_method_names = ['get', ]
+
+    def get_queryset(self):
+        queryset = Services.objects.all()
+        return queryset
 
 
-class UsersViewSet(viewsets.ModelViewSet):
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer
+# class Payment_userViewSet(viewsets.ModelViewSet):
+#     # queryset = Payment_user.objects.get_queryset().order_by('id')
+#     # permission_classes = [DjangoModelPermissions]
+#     # queryset = Payment_user.objects.all()
+#     serializer_class = Payment_userSerializer
+
+#     pagination_class = StandardResultsSetPagination
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['paymentDate', 'expirationDate']
+#     # throttle_scope = 'pagos'
+#     # throttle_scope = 'pagos_prueba'
+    # http_method_names = ['get', ]
+
+#     def get_queryset(self):
+#         queryset = Payment_user.objects.all()
+#         return queryset
 
 
 class Payment_userViewSet(viewsets.ModelViewSet):
+    permission_classes = [DjangoModelPermissions]
     queryset = Payment_user.objects.all()
-    # queryset = Payment_user.objects.get_queryset().order_by('id')
     serializer_class = Payment_userSerializer
+
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['paymentDate', 'expirationDate']
+    throttle_scope = 'pagos'
+    # throttle_scope = 'pagos_prueba'
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+
+        if len(request.data['paymentDate']) > 0 and len(request.data['expirationDate']) > 0:
+            print("holaaaaaaaa", request.data)
+
+            serializer = self.serializer_class(
+                data=request.data, context={'author': user})
+
+            data = {
+                "paymentDate": datetime.date.fromisoformat(request.data['paymentDate']),
+                "expirationDate": datetime.date.fromisoformat(request.data['expirationDate']),
+                "penalidad": float(request.data['amount']) * 0.5,
+            }
+
+            if serializer.is_valid():
+                serializer.save()
+
+                if data["paymentDate"] > data["expirationDate"]:
+                    # payment_id = Payment_user.objects.get(
+                    #     pk=serializer.data['id'])
+                    expiration = Expired_payments(
+                        penalty_fee_amount=data['penalidad'], payment_user_id_id=serializer.data['id'])
+                    expiration.save()
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Expired_paymentsViewSet(viewsets.ModelViewSet):
+    permission_classes = [DjangoModelPermissions]
     queryset = Expired_payments.objects.all()
     serializer_class = Expired_paymentsSerializer
+
+    pagination_class = StandardResultsSetPagination
+    throttle_scope = 'pagos_2'
+    # throttle_scope = 'pagos_2_prueba'

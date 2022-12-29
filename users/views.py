@@ -1,3 +1,6 @@
+from django.shortcuts import render
+
+# Create your views here.
 from django.contrib.auth import authenticate
 from rest_framework import generics, status, viewsets
 from rest_framework.request import Request
@@ -45,6 +48,8 @@ class LoginView(APIView):
 
     def get(self, request: Request):
         content = {"user": str(request.user), "auth": str(request.auth)}
+        print(request.user)
+        print(request.auth)
         return Response(data=content, status=status.HTTP_200_OK)
 
 

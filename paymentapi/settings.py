@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'rest_framework',
+    # 'rest_framework_roles',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
     "users.apps.UsersConfig",
     "pagos.apps.PagosConfig",
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -132,11 +134,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
         'pagos': '1000/day',
+        'pagos_2': '2000/day',
+        'pagos_prueba': '3/day',
+        'pagos_2_prueba': '7/day',
     }
 }
 
