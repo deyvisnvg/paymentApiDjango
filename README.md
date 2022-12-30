@@ -2,13 +2,21 @@
 
 Proyecto final de la Unidad 5
 
+## GitHub Frontend Payment
+
+GitHub APP: [frontenPayment](https://github.com/deyvisnvg/frontendPayment)
+
+## Despliegue en Railway.app
+
+APP: [apiFrontenPayment]()
+
 ## API de pagos
 
 Esta api funcionará como un pequeño proyecto, en la cual deben hacer uso de las siguientes tecnologías.
 
-- > simpleJWT
+- simpleJWT
 
-- > Throttling
+- Throttling
 
 Para esta API de pagos el enunciado es el siguiente.
 
@@ -16,26 +24,22 @@ Se necesitará crear una aplicación de usuarios que permita el login como lo vi
 
 La aplicación de pagos solo debe admitir las siguiente operaciones:
 
-- > GET (list y retrieve)
+- GET (list y retrieve)
 
-- > POST
+- POST
 
 Debe contener paginación y filtros de búsqueda para los campos de user\_\_id, fecha_pago y servicio.
 
 Los servicios a usar dentro de la APP para registrar los pagos son lo siguientes:
 
-- > Netflix
+- Netflix
 
-- > Amazon Video
+- Amazon Video
 
-- > Star +
+- Star +
 
-- > Paramount +
+- Paramount +
 
 Recordar que esta aplicación y las vistas creadas, deben hacer uso de simpleJWT para que se haga uso del login de los usuarios.
 
 Por último, la creación de pagos debe estar limitada a 1000 request por día.
-
-## Despliegue en Railway.app
-
-APP: [ApiPayment]()

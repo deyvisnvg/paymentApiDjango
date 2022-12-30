@@ -36,10 +36,10 @@ class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["email", "username", "password"]
+        fields = ["id", "email", "username", "password"]
 
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "password"]
+        fields = ["id", "email", "password"]

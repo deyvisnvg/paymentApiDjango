@@ -22,19 +22,16 @@ from .serializers import (
 )
 
 import datetime
-# from rest_framework.permissions import IsAuthenticated
-# from .pagination import StandardResultsSetPagination
 
 
 class ServicesViewSet(viewsets.ModelViewSet):
-    permission_classes = [DjangoModelPermissions]
-    # queryset = Services.objects.all()
+    # Descomentar para que funcionen los roles
+    # permission_classes = [DjangoModelPermissions]
     serializer_class = ServicesSerializer
 
     pagination_class = StandardResultsSetPagination
     throttle_scope = 'pagos_2'
     # throttle_scope = 'pagos_2_prueba'
-    # permission_classes = [IsAuthenticated]
 
     http_method_names = ['get', ]
 
@@ -43,26 +40,9 @@ class ServicesViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-# class Payment_userViewSet(viewsets.ModelViewSet):
-#     # queryset = Payment_user.objects.get_queryset().order_by('id')
-#     # permission_classes = [DjangoModelPermissions]
-#     # queryset = Payment_user.objects.all()
-#     serializer_class = Payment_userSerializer
-
-#     pagination_class = StandardResultsSetPagination
-#     filter_backends = [filters.SearchFilter]
-#     search_fields = ['paymentDate', 'expirationDate']
-#     # throttle_scope = 'pagos'
-#     # throttle_scope = 'pagos_prueba'
-    # http_method_names = ['get', ]
-
-#     def get_queryset(self):
-#         queryset = Payment_user.objects.all()
-#         return queryset
-
-
 class Payment_userViewSet(viewsets.ModelViewSet):
-    permission_classes = [DjangoModelPermissions]
+    # Descomentar para que funcionen los roles
+    # permission_classes = [DjangoModelPermissions]
     queryset = Payment_user.objects.all()
     serializer_class = Payment_userSerializer
 
@@ -102,7 +82,8 @@ class Payment_userViewSet(viewsets.ModelViewSet):
 
 
 class Expired_paymentsViewSet(viewsets.ModelViewSet):
-    permission_classes = [DjangoModelPermissions]
+    # Descomentar para que funcionen los roles
+    # permission_classes = [DjangoModelPermissions]
     queryset = Expired_payments.objects.all()
     serializer_class = Expired_paymentsSerializer
 
